@@ -8,6 +8,6 @@ namespace Assets.Classes
 {
 	public interface IAbility
 	{
-		public 
+		
 	}
 }
