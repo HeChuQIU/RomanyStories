@@ -1,4 +1,0 @@
-repository "RomanyStories@wechat_os_qy064b2btoshssc5bdy00m2au@cloud.cn"
-  path "/"
-    br "/main"
-    co "/main"
