@@ -250,6 +250,7 @@ GameObject:
   - component: {fileID: 2103925626}
   - component: {fileID: 2103925629}
   - component: {fileID: 2103925628}
+  - component: {fileID: 2103925630}
   m_Layer: 0
   m_Name: Isis
   m_TagString: Untagged
@@ -360,3 +361,15 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &2103925630
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2103925624}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 001cf52505289e547be3b2912f2c44ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

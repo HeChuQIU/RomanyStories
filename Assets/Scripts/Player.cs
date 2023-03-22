@@ -7,48 +7,70 @@ using UnityEngine;
 namespace Assets.Scripts
 {
 	[RequireComponent(typeof(Rigidbody2D))]
-	public class Player : MonoBehaviour
+	public class Player : Fsm
 	{
 		[SerializeField]
-		private FsmState<Player> currentState;
-		[SerializeField]
-		private Dictionary<StateType, FsmState<Player>> fsmStates = new();
-		[SerializeField]
 		private new Rigidbody2D rigidbody;
+		[SerializeField]
+		private new Collider2D collider;
 		[SerializeField]
 		private float speed;
 		[SerializeField]
 		private string stateName;
 
-		public FsmState<Player> CurrentState
+		public override IFsmState CurrentState
 		{
 			get => currentState;
-			private set
+			protected set
 			{
-				currentState?.OnExit();
-				value?.OnEnter();
-				currentState = value;
-				stateName = currentState.GetType().Name;
+				base.CurrentState = value;
+				stateName = value.Name;
 			}
 		}
 
-		private void Start()
+		private void Awake()
 		{
-			fsmStates.Add(StateType.Idle, new IdleState(this));
-			fsmStates.Add(StateType.Attack, new AttackState(this));
-			fsmStates.Add(StateType.GetHit, new GetHitState(this));
-			fsmStates.Add(StateType.Walk, new WalkState(this));
-			fsmStates.Add(StateType.Die, new DieState(this));
+			FsmState idleState = new();
+			idleState.Name = nameof(StateType.Idle);
+			idleState.OnFixedUpdate += () =>
+			{
+				Vector2 move = new(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+				move *= speed;
+				if (move.sqrMagnitude != 0)
+					CurrentState = fsmStates[StateType.Walk];
+			};
+			fsmStates.Add(StateType.Idle, idleState);
 
-			CurrentState = fsmStates[StateType.Idle];
+			fsmStates.Add(StateType.Attack, new FsmState());
+
+			fsmStates.Add(StateType.GetHit, new FsmState());
+
+			FsmState walkState = new();
+			walkState.Name = nameof(StateType.Walk);
+			walkState.OnFixedUpdate += () =>
+			{
+				Vector2 move = new(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+				move *= speed;
+				if (move.sqrMagnitude == 0)
+					CurrentState = fsmStates[StateType.Idle];
+				rigidbody.velocity = move;
+			};
+			fsmStates.Add(StateType.Walk, walkState);
+
+			fsmStates.Add(StateType.Die, new FsmState());
 
 			rigidbody = GetComponent<Rigidbody2D>();
 		}
 
-		private void FixedUpdate()
+		private void Start()
 		{
-			currentState?.OnFixedUpdate();
+			CurrentState = fsmStates[StateType.Idle];
 		}
+
+/*		protected override void FixedUpdate()
+		{
+			base.FixedUpdate();
+		}*/
 
 		public enum StateType
 		{
@@ -57,136 +79,6 @@ namespace Assets.Scripts
 			GetHit,
 			Walk,
 			Die
-		}
-
-		[Serializable]
-		public class IdleState : FsmState<Player>
-		{
-			public IdleState(Player fsm)
-			{ 
-				Fsm = fsm; 
-			}
-
-			public override Player Fsm { get; protected set; }
-
-			public override void OnEnter()
-			{
-				
-			}
-
-			public override void OnExit()
-			{
-				
-			}
-
-			public override void OnFixedUpdate()
-			{
-				Vector2 move = new(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-				if (move.sqrMagnitude != 0)
-					Fsm.currentState = Fsm.fsmStates[StateType.Walk];
-			}
-		}
-
-		public class AttackState : FsmState<Player>
-		{
-			public AttackState(Player fsm)
-			{
-				Fsm = fsm;
-			}
-
-			public override Player Fsm { get; protected set; }
-			public override void OnEnter()
-			{
-				
-			}
-
-			public override void OnExit()
-			{
-
-			}
-
-			public override void OnFixedUpdate()
-			{
-				
-			}
-		}
-
-		public class GetHitState : FsmState<Player>
-		{
-			public GetHitState(Player fsm)
-			{
-				Fsm = fsm;
-			}
-			
-			public override Player Fsm { get; protected set; }
-			public override void OnEnter()
-			{
-				
-			}
-
-			public override void OnExit()
-			{
-				
-			}
-
-			public override void OnFixedUpdate()
-			{
-				
-			}
-		}
-
-		[Serializable]
-		public class WalkState: FsmState<Player>
-		{
-			public WalkState(Player fsm)
-			{
-				Fsm = fsm;
-			}
-
-			public override Player Fsm { get; protected set; }
-
-			public override void OnEnter()
-			{
-				
-			}
-
-			public override void OnExit()
-			{
-				
-			}
-
-			public override void OnFixedUpdate()
-			{
-				Vector2 move = new(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-				if (move.sqrMagnitude == 0) 
-					Fsm.currentState = Fsm.fsmStates[StateType.Idle];
-				Fsm.rigidbody.velocity = move * Fsm.speed;
-			}
-		}
-
-		public class DieState : FsmState<Player>
-		{
-			public DieState(Player fsm)
-			{
-				Fsm = fsm;
-			}
-
-			public override Player Fsm { get; protected set; }
-
-			public override void OnEnter()
-			{
-				
-			}
-
-			public override void OnExit()
-			{
-				
-			}
-
-			public override void OnFixedUpdate()
-			{
-				
-			}
 		}
 	}
 }
