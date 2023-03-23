@@ -2,14 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Assets.Scripts
+public class InputManager : MonoBehaviour
 {
-	public class InputManager : MonoBehaviour
+	[SerializeField]
+	private Move move;
+	private void Awake()
 	{
-		[SerializeField]
-		private GameObject player;
-
-		public GameObject Player { get => player; set => player = value; }
-
+		move = GetComponent<Move>();
+	}
+	private void Update()
+	{
+		move.move = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
 	}
 }
