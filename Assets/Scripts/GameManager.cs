@@ -12,7 +12,7 @@ namespace Assets.Scripts
 		private void Awake()
 		{
 			Instance = this;
-			itemSystem = Classes.ItemSystem.Instance;
+			itemSystem = Scripts.ItemSystem.Instance;
 		}
 
 		[SerializeField]

@@ -135,6 +135,7 @@ GameObject:
   - component: {fileID: 255059231}
   - component: {fileID: 255059230}
   - component: {fileID: 255059229}
+  - component: {fileID: 255059235}
   - component: {fileID: 255059233}
   m_Layer: 0
   m_Name: Isis
@@ -157,7 +158,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   move: {x: 0, y: 0}
   rigidbody: {fileID: 0}
-  speed: 20
+  entity: {fileID: 255059235}
 --- !u!114 &255059230
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -259,6 +260,26 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &255059235
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 255059228}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d022d773cdd6c146b18bbb81bbb9d03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  entityData:
+    maxHealth: 0
+    currentHealth: 0
+    maxStrength: 0
+    strength: 0
+    maxArmor: 0
+    currentExtraHealth: 0
+    speed: 250
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0

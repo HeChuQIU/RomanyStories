@@ -27,7 +27,7 @@ public class ItemStack : IItemStack
 		if (Item.Id != itemStack.Item.Id)
 			return false;
 		if (Amount + itemStack.Amount <= GameManager.Instance.ItemSystem
-			.ItemRegisterDatas[itemStack.Item.Id].MaxStackSize)
+			.ItemInfos[itemStack.Item.Id].MaxStackSize)
 			return true;
 		return false;
 	}

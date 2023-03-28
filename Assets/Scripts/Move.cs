@@ -2,21 +2,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Player))]
 public class Move : MonoBehaviour
 {
 	public Vector2 move;
+
 	[SerializeField]
 	private new Rigidbody2D rigidbody;
+	public Rigidbody2D Rigidbody { get => rigidbody; set => rigidbody = value; }
+
 	[SerializeField]
-	private float speed = 1f;
+	private Player entity;
+	public Player Entity { get => entity; set => entity = value; }
 
 	private void Awake()
 	{
-		rigidbody = GetComponent<Rigidbody2D>();
+		Rigidbody = GetComponent<Rigidbody2D>();
+		Entity = GetComponent<Player>();
 	}
 
 	private void FixedUpdate()
 	{
-		rigidbody.velocity = Time.fixedDeltaTime * speed * move;
+		Rigidbody.velocity = Time.fixedDeltaTime * Entity.EntityData.Speed * move;
 	}
 }

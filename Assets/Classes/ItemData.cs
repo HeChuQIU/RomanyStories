@@ -1,15 +1,22 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Assets.Classes;
+using System.Linq;
 
 public interface IItemData
 {
 	public string Id { get; set; }
 	public string Name { get; set; }
-	public int MaxStackSize { get; set; }
 	public Sprite Sprite { get; set; }
+	public string this[string propertyName] { get;set; }
+	public bool IsIdEqualWith(IItemInfo itemInfo)
+	{
+		return Id == itemInfo.Id;
+	}
 }
 
+[Serializable]
 public struct ItemData : IItemData
 {
 
@@ -17,49 +24,36 @@ public struct ItemData : IItemData
 
 	public string Name { get; set; }
 
-	public int MaxStackSize { get; set; }
-
 	public Sprite Sprite { get; set; }
 
-	public ItemData(string id, string name, int maxStackSize, Sprite sprite)
+	private Dictionary<string, string> properties;
+	public string this[string propertyName] 
+	{
+		get 
+		{
+			return properties[propertyName];
+		}
+		set
+		{ 
+			properties.Add(propertyName, value);
+		} 
+	}
+
+	public ItemData(string id, string name, Sprite sprite, IEnumerable<KeyValuePair<string, string>> properties)
 	{
 		Id = id;
 		Name = name;
-		MaxStackSize = maxStackSize;
 		Sprite = sprite;
+		Dictionary<string, string> propertiesDictionary = new();
+		properties.ToList().ForEach(p => { propertiesDictionary.Add(p.Key, p.Value); });
+		this.properties = propertiesDictionary;
 	}
 
-
-
-	public override bool Equals(object obj)
+	public ItemData(string id,string name,Sprite sprite,Dictionary<string,string> properties)
 	{
-		return obj is ItemData other &&
-			   Id == other.Id &&
-			   Name == other.Name &&
-			   MaxStackSize == other.MaxStackSize &&
-			   EqualityComparer<Sprite>.Default.Equals(Sprite, other.Sprite);
-	}
-
-	public override int GetHashCode()
-	{
-		return HashCode.Combine(Id, Name, MaxStackSize, Sprite);
-	}
-
-	public void Deconstruct(out string id, out string name, out int maxStackSize, out Sprite sprite)
-	{
-		id = this.Id;
-		name = this.Name;
-		maxStackSize = this.MaxStackSize;
-		sprite = this.Sprite;
-	}
-
-	public static implicit operator (string id, string name, int maxStackSize, Sprite sprite)(ItemData value)
-	{
-		return (value.Id, value.Name, value.MaxStackSize, value.Sprite);
-	}
-
-	public static implicit operator ItemData((string id, string name, int maxStackSize, Sprite sprite) value)
-	{
-		return new ItemData(value.id, value.name, value.maxStackSize, value.sprite);
+		Id = id;
+		Name = name;
+		Sprite = sprite;
+		this.properties = properties;
 	}
 }
