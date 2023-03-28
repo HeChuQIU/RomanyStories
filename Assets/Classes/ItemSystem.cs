@@ -7,13 +7,13 @@ namespace Assets.Classes
 {
 	public interface IItemSystem : ISingleton<ItemSystem>
 	{
-		IDictionary<string, IItemData> ItemRegisterDatas { get; }
-		void RegisterItem(IItemData itemRegisterData);
-		void RegisterItems(IEnumerable<IItemData> itemRegisterDatas);
+		IDictionary<string, IItemInfo> ItemInfos { get; }
+		void RegisterItem(IItemInfo itemInfo);
+		void RegisterItems(IEnumerable<IItemInfo> itemInfo);
 		void UnRegisterItem(string id);
 		void UnRegisterItems(IEnumerable<string> ids);
-		IItemData GetItemRegisterData(string id);
-		IEnumerable<IItemData> GetItemRegisterDatasByName(string itemName);
+		IItemInfo GetItemRegisterData(string id);
+		IEnumerable<IItemInfo> GetItemRegisterDatasByName(string itemName);
 	}
 
 	public class ItemSystem : IItemSystem
@@ -28,36 +28,36 @@ namespace Assets.Classes
 			}
 		}
 
-		public IDictionary<string, IItemData> ItemRegisterDatas => itemRegisterDatas;
+		public IDictionary<string, IItemInfo> ItemInfos => itemInfos;
 
-		private Dictionary<string, IItemData> itemRegisterDatas = new();
+		private Dictionary<string, IItemInfo> itemInfos = new();
 
-		public void RegisterItem(IItemData itemRegisterData)
+		public void RegisterItem(IItemInfo itemInfo)
 		{
-			ItemRegisterDatas.Add(itemRegisterData.Id, itemRegisterData);
+			ItemInfos.Add(itemInfo.Id, itemInfo);
 		}
 
-		public void RegisterItems(IEnumerable<IItemData> itemRegisterDatas)
+		public void RegisterItems(IEnumerable<IItemInfo> itemInfos)
 		{
-			foreach (var item in itemRegisterDatas)
-				RegisterItem(item);
+			foreach (var itemInfo in itemInfos)
+				RegisterItem(itemInfo);
 		}
 
-		public IItemData GetItemRegisterData(string id)
+		public IItemInfo GetItemRegisterData(string id)
 		{
-			return ItemRegisterDatas[id];
+			return ItemInfos[id];
 		}
 
-		public IEnumerable<IItemData> GetItemRegisterDatasByName(string itemName)
+		public IEnumerable<IItemInfo> GetItemRegisterDatasByName(string itemName)
 		{
-			return from pair in ItemRegisterDatas
+			return from pair in ItemInfos
 				   where pair.Value.Name == itemName
 				   select pair.Value;
 		}
 
 		public void UnRegisterItem(string id)
 		{
-			ItemRegisterDatas.Remove(id);
+			ItemInfos.Remove(id);
 		}
 
 		public void UnRegisterItems(IEnumerable<string> ids)
