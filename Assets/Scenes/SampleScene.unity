@@ -280,6 +280,8 @@ MonoBehaviour:
     maxArmor: 0
     currentExtraHealth: 0
     speed: 250
+  spriteRenderer: {fileID: 0}
+  rigidbody: {fileID: 0}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
