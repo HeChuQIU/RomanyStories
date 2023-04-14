@@ -17,9 +17,12 @@ public class Bullet : MonoBehaviour
 		if (move == null)
 			move = GetComponent<Move>();
 	}
+<<<<<<< HEAD
 
 	private void OnCollisionEnter(Collision collision)
 	{
 		
 	}
+=======
+>>>>>>> d18f1719caae2013240c94eda6dcc87912738200
 }
