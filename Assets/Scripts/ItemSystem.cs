@@ -24,14 +24,13 @@ namespace Assets.Scripts
 		{
 			get
 			{
-				instance ??= new ItemSystem();
 				return instance;
 			}
 		}
 
 		public IDictionary<string, IItemInfo> ItemInfos => itemInfos;
 
-		private Dictionary<string, IItemInfo> itemInfos = new();
+		private Dictionary<string, IItemInfo> itemInfos;
 
 		public void RegisterItem(IItemInfo itemInfo)
 		{
