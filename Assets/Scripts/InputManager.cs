@@ -12,6 +12,8 @@ public class InputManager : MonoBehaviour
 	}
 	private void Update()
 	{
-		move.move = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+		move.moveVector = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
 	}
+	
+	
 }
