@@ -4,13 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Assets.Classes
 {
 	public interface IEntityData
 	{
-		int MaxHealth { get; set; }
-		int CurrentHealth { get; set; }
+		int MaxHitPoint { get; set; }
+		int CurrentHitPoint { get; set; }
 		int MaxStrength { get; set; }
 		int Strength { get; set; }
 		int MaxArmor { get; set; }
@@ -20,24 +21,10 @@ namespace Assets.Classes
 	}
 
 	[Serializable]
-	public struct EntityData : IEntityData
+	public class EntityData : IEntityData
 	{
-		public EntityData(int maxHealth, int currentHealth, int maxStrength, int strength, int maxArmor, int currentExtraHealth, float speed, Dictionary<string, string> properties = null)
-		{
-			this.maxHealth = maxHealth;
-			this.currentHealth = currentHealth;
-			this.maxStrength = maxStrength;
-			this.strength = strength;
-			this.maxArmor = maxArmor;
-			this.currentExtraHealth = currentExtraHealth;
-			this.speed = speed;
-			this.properties = properties ?? new();
-		}
-
-		public static EntityData Default => new(0, 0, 0, 0, 0, 0, 0.0f);
-
-		public int MaxHealth { get => maxHealth; set => maxHealth = value; }
-		public int CurrentHealth { get => currentHealth; set => currentHealth = value; }
+		public int MaxHitPoint { get => maxHitPoint; set => maxHitPoint = value; }
+		public int CurrentHitPoint { get => currentHitPoint; set => currentHitPoint = value; }
 		public int MaxStrength { get => maxStrength; set => maxStrength = value; }
 		public int Strength { get => strength; set => strength = value; }
 		public int MaxArmor { get => maxArmor; set => maxArmor = value; }
@@ -45,9 +32,9 @@ namespace Assets.Classes
 		public float Speed { get => speed; set => speed = value; }
 
 		[SerializeField]
-		private int maxHealth;
+		private int maxHitPoint;
 		[SerializeField]
-		private int currentHealth;
+		private int currentHitPoint;
 		[SerializeField]
 		private int maxStrength;
 		[SerializeField]
