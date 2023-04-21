@@ -194,7 +194,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.5, y: 0.5}
   m_EdgeRadius: 0
 --- !u!1 &255059228
 GameObject:
@@ -354,6 +354,7 @@ MonoBehaviour:
     maxArmor: 0
     currentExtraHealth: 0
     speed: 250
+    attackDamage: 0
   hitBox: {fileID: 0}
   move: {fileID: 0}
   spriteRenderer: {fileID: 0}
@@ -535,3 +536,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bullet: {fileID: 5623461613535779960, guid: ddea2ff849013a3438c2accb7cccd5f2, type: 3}
+  enemies: []
+  player: {fileID: 0}

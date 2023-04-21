@@ -47,5 +47,5 @@ public abstract class Entity : MonoBehaviour
         HitBox.OnBeHit += OnBeHit;
     }
 
-    protected abstract void OnBeHit(HitBox hitBox);
+    protected abstract void OnBeHit(HitBox hitBox,HitBox otherHitBox);
 }

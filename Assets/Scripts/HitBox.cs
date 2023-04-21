@@ -21,7 +21,7 @@ public class HitBox : MonoBehaviour
         protected set => collider = value;
     }
 
-    public Action<HitBox> OnBeHit { get; set; }
+    public Action<HitBox,HitBox> OnBeHit { get; set; }
 
     private void Awake()
     {
@@ -30,10 +30,10 @@ public class HitBox : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (!collider.TryGetComponent(out HitBox hitBox))
+        if (!collider.TryGetComponent(out HitBox otherHitBox))
             return;
 
-        OnBeHit(this);
+        OnBeHit(this,otherHitBox);
     }
 
     private void CheckRequire()

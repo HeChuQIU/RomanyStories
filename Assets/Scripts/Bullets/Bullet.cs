@@ -5,9 +5,9 @@ namespace Assets.Scripts.Bullets
 {
     public class Bullet : Entity
     {
-        protected override void OnBeHit(HitBox hitBox)
+        protected override void OnBeHit(HitBox hitBox, HitBox otherHitBox)
         {
-            Destroy(hitBox.gameObject);
+            Destroy(hitBox.Entity.gameObject);
         }
     }
 }

@@ -28,14 +28,11 @@ namespace Assets.Scripts.Bullets
             while (true)
             {
                 moveVector = moveVector.Rotate(Random.Range(0f,360f));
-                if (gap <= 0.1f)
+                if (gap > 0.1f)
                 {
-                    continue;
+                    EntityData.Speed *= 1.1f;
+                    gap /= 1.1f;
                 }
-
-                EntityData.Speed *= 1.1f;
-                gap /= 1.1f;
-                
                 yield return new WaitForSeconds(gap);
             }
         }

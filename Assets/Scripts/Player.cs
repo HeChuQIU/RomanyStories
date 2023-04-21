@@ -2,9 +2,11 @@ using System;
 using Assets.Classes;
 using System.Collections;
 using System.Collections.Generic;
+using Assets.Scripts.Bullets;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
-public class Player : Entity
+public class Player : Mob
 {
     [SerializeField] private SpriteRenderer spriteRenderer;
     [SerializeField] private new Rigidbody2D rigidbody;
@@ -21,9 +23,14 @@ public class Player : Entity
             rigidbody = GetComponent<Rigidbody2D>();
     }
 
-    protected override void OnBeHit(HitBox hitBox)
+    protected override void OnBeHit(HitBox hitBox, HitBox otherHitBox)
     {
-        
+        Debug.Log($"{otherHitBox.Entity.gameObject.name} hit {HitBox.Entity.gameObject.name}");
+        var bullet = otherHitBox.Entity as Bullet;
+        if (bullet != null)
+        {
+            TakeDamage(bullet.EntityData.Damage);
+        }
     }
 
     private void Update()
@@ -39,6 +46,5 @@ public class Player : Entity
 
     private void FixedUpdate()
     {
-        
     }
 }
