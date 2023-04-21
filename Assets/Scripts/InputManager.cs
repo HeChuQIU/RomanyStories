@@ -14,4 +14,6 @@ public class InputManager : MonoBehaviour
 	{
 		move.moveVector = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
 	}
+	
+	
 }

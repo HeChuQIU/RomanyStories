@@ -13,6 +13,7 @@ namespace Assets.Scripts
         public static GameManager Instance { get; private set; }
 
         [SerializeField] private GameObject bullet;
+<<<<<<< HEAD
         [SerializeField] private IItemSystem itemSystem;
         [SerializeField] private List<GameObject> enemies;
         [SerializeField] private GameObject player;
@@ -29,6 +30,9 @@ namespace Assets.Scripts
             set => player = value;
         }
 
+=======
+
+>>>>>>> f84fc72b706bad35a137f32e0f92e6141476119f
         private void Awake()
         {
             Instance = this;
@@ -41,6 +45,11 @@ namespace Assets.Scripts
                 Instantiate(bullet, new Vector3(Random.Range(-3f, 3f), Random.Range(-3f, 3f), 0), Quaternion.identity);
         }
 
+<<<<<<< HEAD
+=======
+        [SerializeField] private IItemSystem itemSystem;
+
+>>>>>>> f84fc72b706bad35a137f32e0f92e6141476119f
         public IItemSystem ItemSystem
         {
             get => itemSystem;
