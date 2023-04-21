@@ -4,19 +4,26 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using Logger = Assets.Classes.Logger;
 using Random = UnityEngine.Random;
 
 namespace Assets.Scripts
 {
     public class GameManager : MonoBehaviour, ISingleton<GameManager>
     {
-        public static GameManager Instance { get; private set; }
-
-        [SerializeField] private GameObject bullet;
-<<<<<<< HEAD
         [SerializeField] private IItemSystem itemSystem;
         [SerializeField] private List<GameObject> enemies;
-        [SerializeField] private GameObject player;
+        [SerializeField] private Player player;
+        [SerializeField] private Camera mainCamera;
+        [SerializeField] private float cameraSpeed;
+        [SerializeField] private float maxCameraDistance;
+
+        public static GameManager Instance { get; private set; }
+
+        public Vector2 GetMousePosition()
+        {
+            return mainCamera.ScreenToWorldPoint(Input.mousePosition);
+        }
 
         public List<GameObject> Enemies
         {
@@ -24,32 +31,42 @@ namespace Assets.Scripts
             set => enemies = value;
         }
 
-        public GameObject Player
+        public Player Player
         {
             get => player;
             set => player = value;
         }
 
-=======
-
->>>>>>> f84fc72b706bad35a137f32e0f92e6141476119f
         private void Awake()
         {
             Instance = this;
             itemSystem = Scripts.ItemSystem.Instance;
+            if (mainCamera == null)
+                mainCamera = Camera.main;
         }
 
         private void Update()
         {
-            if (Input.GetKey(KeyCode.E))
-                Instantiate(bullet, new Vector3(Random.Range(-3f, 3f), Random.Range(-3f, 3f), 0), Quaternion.identity);
+            MoveCamera();
+
+            void MoveCamera()
+            {
+                var cameraPosition = mainCamera.transform.position;
+                Vector2 playerPosition = player.transform.position;
+                var mousePosition = GetMousePosition();
+                var targetPosition = Vector2.Lerp(mousePosition, playerPosition, 0.5f);
+                targetPosition = (targetPosition - playerPosition).magnitude > maxCameraDistance
+                    ? (targetPosition - playerPosition).normalized * maxCameraDistance + playerPosition
+                    : targetPosition;
+                var difference = targetPosition - (Vector2)cameraPosition;
+                if (difference.sqrMagnitude < Mathf.Pow(0.1f, 2f))
+                    return;
+                var direction = difference / 2f;
+                cameraPosition += (Vector3)(direction * (cameraSpeed * Time.deltaTime));
+                mainCamera.transform.position = cameraPosition;
+            }
         }
 
-<<<<<<< HEAD
-=======
-        [SerializeField] private IItemSystem itemSystem;
-
->>>>>>> f84fc72b706bad35a137f32e0f92e6141476119f
         public IItemSystem ItemSystem
         {
             get => itemSystem;

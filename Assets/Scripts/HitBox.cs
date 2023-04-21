@@ -3,51 +3,62 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Collider2D))]
-public class HitBox : MonoBehaviour
+namespace Assets.Scripts
 {
-    [SerializeField] private Entity entity;
-    [SerializeField] private new Collider2D collider;
-
-    public Entity Entity
+    [RequireComponent(typeof(Collider2D))]
+    public class HitBox : MonoBehaviour
     {
-        get => entity;
-        protected set => entity = value;
-    }
+        [SerializeField] private Entity entity;
+        [SerializeField] private new Collider2D collider;
+        [SerializeField] private bool isWall;
 
-    public Collider2D Collider
-    {
-        get => collider;
-        protected set => collider = value;
-    }
-
-    public Action<HitBox> OnBeHit { get; set; }
-
-    private void Awake()
-    {
-        CheckRequire();
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (!collider.TryGetComponent(out HitBox hitBox))
-            return;
-
-        OnBeHit(this);
-    }
-
-    private void CheckRequire()
-    {
-        if (entity == null)
-            entity = GetComponentInParent<Entity>();
-        if (entity == null)
+        public Entity Entity
         {
-            throw new Exception("HitBox needs Entity on parent gameObject");
+            get => entity;
+            protected set => entity = value;
         }
 
-        if (collider == null && !TryGetComponent(out collider))
+        public Collider2D Collider
         {
-            throw new Exception("HitBox needs Collider2D on gameObject");
+            get => collider;
+            protected set => collider = value;
+        }
+
+        public bool IsWall
+        {
+            get => isWall;
+            set => isWall = value;
+        }
+
+        public Action<HitBox, HitBox> OnBeHit { get; set; }
+
+        private void Awake()
+        {
+            CheckRequire();
+        }
+
+        private void OnTriggerEnter2D(Collider2D collision)
+        {
+            var otherHitBox = collision.GetComponent<HitBox>();
+            OnBeHit?.Invoke(this, otherHitBox);
+        }
+
+        private void CheckRequire()
+        {
+            if (!IsWall)
+            {
+                if (entity == null)
+                    entity = GetComponentInParent<Entity>();
+                if (entity == null)
+                {
+                    throw new Exception("HitBox needs Entity on parent gameObject");
+                }
+            }
+
+            if (collider == null && !TryGetComponent(out collider))
+            {
+                throw new Exception("HitBox needs Collider2D on gameObject");
+            }
         }
     }
 }

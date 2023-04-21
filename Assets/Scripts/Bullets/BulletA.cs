@@ -7,35 +7,26 @@ using Random = UnityEngine.Random;
 
 namespace Assets.Scripts.Bullets
 {
-    [RequireComponent(typeof(Move))]
     public class BulletA : Bullet
     {
-        [SerializeField] private Vector2 moveVector;
+        [SerializeField] private Vector2 moveDirection;
 
-        private void Start()
+        protected void FixedUpdate()
         {
-            StartCoroutine(Action());
+            moveVelocity = EntityData.Speed * moveDirection;
         }
 
-        private void FixedUpdate()
-        {
-            Move.moveVector = EntityData.Speed * moveVector;
-        }
-
-        private IEnumerator Action()
+        protected override IEnumerator Action()
         {
             var gap = 2f;
             while (true)
             {
-                moveVector = moveVector.Rotate(Random.Range(0f,360f));
-                if (gap <= 0.1f)
+                moveVelocity = Vector2Extension.Rotate(moveVelocity, Random.Range(0f,360f));
+                if (gap > 0.1f)
                 {
-                    continue;
+                    EntityData.Speed *= 1.1f;
+                    gap /= 1.1f;
                 }
-
-                EntityData.Speed *= 1.1f;
-                gap /= 1.1f;
-                
                 yield return new WaitForSeconds(gap);
             }
         }

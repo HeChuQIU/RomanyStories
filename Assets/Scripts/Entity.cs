@@ -3,49 +3,57 @@ using Assets.Classes;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
+using Logger = Assets.Classes.Logger;
 using Random = UnityEngine.Random;
 
-public abstract class Entity : MonoBehaviour
+namespace Assets.Scripts
 {
-    [SerializeField] private EntityData entityData;
-    [SerializeField] private HitBox hitBox;
-    [SerializeField] private Move move;
-
-    public virtual EntityData EntityData
+    [RequireComponent(typeof(Rigidbody2D))]
+    public abstract class Entity : MonoBehaviour
     {
-        get => entityData;
-        private set => entityData = value;
-    }
+        [SerializeField] private EntityData entityData;
+        [SerializeField] private HitBox hitBox;
+        [FormerlySerializedAs("moveVector")] [SerializeField] protected Vector2 moveVelocity;
 
-    protected HitBox HitBox
-    {
-        get => hitBox;
-        set => hitBox = value;
-    }
+        public virtual EntityData EntityData
+        {
+            get => entityData;
+            private set => entityData = value;
+        }
 
-    protected Move Move
-    {
-        get => move;
-        set => move = value;
-    }
+        public Rigidbody2D Rigidbody { get; set; }
 
-    protected virtual void CheckRequire()
-    {
-        if (HitBox == null)
-            HitBox = GetComponentInChildren<HitBox>();
-        if (HitBox == null)
-            throw new Exception("Entity needs HitBox on child gameObject");
-        if (Move == null)
-            Move = GetComponent<Move>();
-        if (Move == null)
-            throw new Exception("Entity needs Move on gameObject");
-    }
+        protected virtual void CheckRequire()
+        {
+            if (hitBox == null)
+                hitBox = GetComponentInChildren<HitBox>();
+            if (hitBox == null)
+            {
+                Type[] componentTypes = { typeof(HitBox), typeof(BoxCollider2D) };
+                GameObject hitBoxGameObject = new GameObject("HitBox", componentTypes);
+                hitBoxGameObject.transform.SetParent(transform);
+            }
 
-    protected virtual void Awake()
-    {
-        CheckRequire();
-        HitBox.OnBeHit += OnBeHit;
-    }
+            if (Rigidbody==null)
+                Rigidbody=GetComponent<Rigidbody2D>();
+            if (Rigidbody==null)
+            {
+                gameObject.AddComponent<Rigidbody2D>();
+            }
+        }
 
-    protected abstract void OnBeHit(HitBox hitBox);
+        protected abstract void OnBeHit(HitBox hitBox, HitBox otherHitBox);
+
+        protected virtual void Awake()
+        {
+            CheckRequire();
+            hitBox.OnBeHit += OnBeHit;
+        }
+
+        protected virtual void Update()
+        {
+            Rigidbody.velocity = moveVelocity;
+        }
+    }
 }

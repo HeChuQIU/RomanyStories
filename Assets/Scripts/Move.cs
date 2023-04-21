@@ -3,35 +3,38 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-[RequireComponent(typeof(Rigidbody2D))]
-public class Move : MonoBehaviour
+namespace Assets.Scripts
 {
-    public Vector2 moveVector;
-
-    [SerializeField] private new Rigidbody2D rigidbody;
-
-    public Rigidbody2D Rigidbody
+    [RequireComponent(typeof(Rigidbody2D))]
+    public class Move : MonoBehaviour
     {
-        get => rigidbody;
-        set => rigidbody = value;
-    }
+        public Vector2 moveVector;
 
-    [SerializeField] private Player entity;
+        [SerializeField] private new Rigidbody2D rigidbody;
 
-    public Player Entity
-    {
-        get => entity;
-        set => entity = value;
-    }
+        public Rigidbody2D Rigidbody
+        {
+            get => rigidbody;
+            set => rigidbody = value;
+        }
 
-    private void Awake()
-    {
-        Rigidbody = GetComponent<Rigidbody2D>();
-        Entity = GetComponent<Player>();
-    }
+        [SerializeField] private Player entity;
 
-    private void FixedUpdate()
-    {
-        Rigidbody.velocity = Time.fixedDeltaTime * moveVector;
+        public Player Entity
+        {
+            get => entity;
+            set => entity = value;
+        }
+
+        private void Awake()
+        {
+            Rigidbody = GetComponent<Rigidbody2D>();
+            Entity = GetComponent<Player>();
+        }
+
+        private void FixedUpdate()
+        {
+            Rigidbody.velocity = Time.fixedDeltaTime * moveVector;
+        }
     }
 }
