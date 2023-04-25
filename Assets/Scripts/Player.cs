@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 namespace Assets.Scripts
@@ -24,8 +25,12 @@ namespace Assets.Scripts
                 animator = GetComponent<Animator>();
         }
 
-        private float nextAttackTime;
+        protected override IEnumerator Action()
+        {
+            yield return null;
+        }
 
+        private float nextAttackTime;
         protected override void Update()
         {
             base.Update();

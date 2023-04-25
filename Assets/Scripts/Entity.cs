@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using Assets.Classes;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -51,5 +52,12 @@ namespace Assets.Scripts
         {
             Rigidbody.velocity = moveVelocity;
         }
+
+        protected virtual void Start()
+        {
+            StartCoroutine((IEnumerator)Action());
+        }
+
+        protected abstract IEnumerator Action();
     }
 }

@@ -23,11 +23,6 @@ namespace Assets.Scripts.Bullets
             lastPosition = position;
         }
 
-        protected virtual void Start()
-        {
-            StartCoroutine(Action());
-        }
-
         protected override void OnBeHit(HitBox hitBox, HitBox otherHitBox)
         {
             if (otherHitBox == null)
@@ -36,7 +31,5 @@ namespace Assets.Scripts.Bullets
                 return;
             Destroy(hitBox.Entity.gameObject);
         }
-
-        protected abstract IEnumerator Action();
     }
 }
