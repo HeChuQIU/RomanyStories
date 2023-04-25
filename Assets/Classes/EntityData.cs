@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Assets.Classes
 {
@@ -65,14 +66,20 @@ namespace Assets.Classes
 
         public float Damage
         {
-            get => attackDamage;
-            set => attackDamage = value;
+            get => damage;
+            set => damage = value;
         }
 
         public EntityCamp Camp
         {
             get => camp;
             set => camp = value;
+        }
+
+        public float IdleTime
+        {
+            get => idleTime;
+            set => idleTime = value;
         }
 
         [SerializeField] private int maxHitPoint;
@@ -82,8 +89,9 @@ namespace Assets.Classes
         [SerializeField] private int maxArmor;
         [SerializeField] private int currentExtraHealth;
         [SerializeField] private float speed;
-        [SerializeField] private float attackDamage;
+        [FormerlySerializedAs("attackDamage")] [SerializeField] private float damage;
         [SerializeField] private EntityCamp camp;
+        [SerializeField] private float idleTime;
         private Dictionary<string, string> properties = new();
 
         public string this[string propertyName]

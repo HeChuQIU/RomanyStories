@@ -204,10 +204,12 @@ MonoBehaviour:
     maxArmor: 0
     currentExtraHealth: 0
     speed: 5
-    attackDamage: 1
+    damage: 1
     camp: 0
+    idleTime: 0
   hitBox: {fileID: 0}
   moveVelocity: {x: 1, y: 0}
+  spriteRenderer: {fileID: 0}
   moveDirection: {x: 0, y: 0}
 --- !u!50 &6803175854587156667
 Rigidbody2D:

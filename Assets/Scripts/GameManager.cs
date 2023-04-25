@@ -11,6 +11,8 @@ namespace Assets.Scripts
         [SerializeField] private Camera mainCamera;
         [SerializeField] private float cameraSpeed;
         [SerializeField] private float maxCameraDistance;
+        [SerializeField] private bool isMoveCameraWithoutMouse;
+        [SerializeField] private Mob mobPrefab;
 
         public static GameManager Instance { get; private set; }
 
@@ -41,7 +43,18 @@ namespace Assets.Scripts
 
         private void Update()
         {
-            MoveCamera();
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                Instantiate(mobPrefab, GetMousePosition(), Quaternion.identity);
+            }
+        }
+
+        private void LateUpdate()
+        {
+            if (isMoveCameraWithoutMouse)
+                MoveCameraWithoutMouse();
+            else
+                MoveCamera();
 
             void MoveCamera()
             {
@@ -52,12 +65,16 @@ namespace Assets.Scripts
                 targetPosition = (targetPosition - playerPosition).magnitude > maxCameraDistance
                     ? (targetPosition - playerPosition).normalized * maxCameraDistance + playerPosition
                     : targetPosition;
-                var difference = targetPosition - (Vector2)cameraPosition;
-                if (difference.sqrMagnitude < Mathf.Pow(0.1f, 2f))
-                    return;
-                var direction = difference / 2f;
+                var direction = targetPosition - (Vector2)cameraPosition;
                 cameraPosition += (Vector3)(direction * (cameraSpeed * Time.deltaTime));
                 mainCamera.transform.position = cameraPosition;
+            }
+
+            void MoveCameraWithoutMouse()
+            {
+                var position = player.transform.position;
+                position.z = mainCamera.transform.position.z;
+                mainCamera.transform.position = position;
             }
         }
 

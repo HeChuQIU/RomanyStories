@@ -1,11 +1,12 @@
 using System;
+using System.Collections;
+using System.Linq;
 using UnityEngine;
 
 namespace Assets.Scripts
 {
     public class Player : Mob
     {
-        [SerializeField] private SpriteRenderer spriteRenderer;
         [SerializeField] private new Rigidbody2D rigidbody;
         [SerializeField] private BulletPlayer bulletPrefab;
         [SerializeField] private Animator animator;
@@ -24,6 +25,11 @@ namespace Assets.Scripts
                 animator = GetComponent<Animator>();
         }
 
+        protected override IEnumerator Action()
+        {
+            yield return null;
+        }
+
         private float nextAttackTime;
 
         protected override void Update()
@@ -31,7 +37,7 @@ namespace Assets.Scripts
             base.Update();
             if (Input.GetAxis("Fire1") > 0)
             {
-                if (Time.time>nextAttackTime)
+                if (Time.time > nextAttackTime)
                 {
                     Attack();
                 }
@@ -41,11 +47,16 @@ namespace Assets.Scripts
             moveVelocity.x = Input.GetAxis("Horizontal");
             moveVelocity.y = Input.GetAxis("Vertical");
             moveVelocity = EntityData.Speed * moveVelocity;
-            
+
             void Attack()
             {
                 var bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
-                bullet.targetPosition = GameManager.Instance.GetMousePosition();
+                Vector2 targetPosition = Targets.Count > 0
+                    ? (from target in Targets
+                        orderby (target.transform.position - transform.position).magnitude
+                        select target.transform.position).First()
+                    : GameManager.Instance.GetMousePosition();
+                bullet.targetPosition = targetPosition;
                 nextAttackTime = Time.time + attackColdDown;
             }
 

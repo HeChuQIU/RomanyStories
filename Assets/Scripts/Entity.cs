@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using Assets.Classes;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -10,7 +11,8 @@ namespace Assets.Scripts
     {
         [SerializeField] private EntityData entityData;
         [SerializeField] private HitBox hitBox;
-        [FormerlySerializedAs("moveVector")] [SerializeField] protected Vector2 moveVelocity;
+        [SerializeField] protected Vector2 moveVelocity;
+        [SerializeField] protected SpriteRenderer spriteRenderer;
 
         public virtual EntityData EntityData
         {
@@ -43,6 +45,7 @@ namespace Assets.Scripts
 
         protected virtual void Awake()
         {
+            spriteRenderer = GetComponent<SpriteRenderer>();
             CheckRequire();
             hitBox.OnBeHit += OnBeHit;
         }
@@ -51,5 +54,12 @@ namespace Assets.Scripts
         {
             Rigidbody.velocity = moveVelocity;
         }
+
+        protected virtual void Start()
+        {
+            StartCoroutine((IEnumerator)Action());
+        }
+
+        protected abstract IEnumerator Action();
     }
 }
