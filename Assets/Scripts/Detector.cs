@@ -8,7 +8,7 @@ namespace Assets.Scripts
     {
         [SerializeField] private float detectorRadius;
         [SerializeField] private Mob hostMob;
-        private CircleCollider2D collider;
+        private new CircleCollider2D collider;
 
         public float DetectorRadius
         {

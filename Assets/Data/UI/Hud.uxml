@@ -1,12 +1,3 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/Data/UI/Hud.uss?fileID=7433441132597879392&amp;guid=6fb72e16b9084f4448acbf7671956e49&amp;type=3#Hud" />
-    <ui:VisualElement name="LeftTop" style="position: absolute; left: 0; top: 0; flex-grow: 1;" />
-    <ui:VisualElement name="LeftBottom" style="position: absolute; bottom: 0; left: 0; width: 25%; height: 40%;">
-        <ui:VisualElement name="Skill" style="width: 128px; height: 128px; position: absolute; background-image: url(&apos;project://database/Assets/Arts/UI/HUD.png?fileID=-652692761&amp;guid=e3876ae3494b5374caa353b0c7f10de5&amp;type=3#HUD_1&apos;); -unity-background-scale-mode: stretch-to-fill; scale: 0.9 0.9;">
-            <ui:VisualElement name="Key" style="position: absolute; width: 40px; height: 40px; top: 128px; left: 64px; translate: -50% -50%; background-image: url(&apos;project://database/Assets/Arts/UI/HUD.png?fileID=-250080322&amp;guid=e3876ae3494b5374caa353b0c7f10de5&amp;type=3#HUD_10&apos;);" />
-        </ui:VisualElement>
-        <ui:VisualElement name="Item" style="width: 128px; height: 128px; position: absolute; left: 128px; background-image: url(&apos;project://database/Assets/Arts/UI/HUD.png?fileID=-652692761&amp;guid=e3876ae3494b5374caa353b0c7f10de5&amp;type=3#HUD_1&apos;); scale: 0.9 0.9;">
-            <ui:VisualElement name="Key" style="position: absolute; width: 40px; height: 40px; top: 128px; left: 64px; translate: -50% -50%; background-image: url(&apos;project://database/Assets/Arts/UI/HUD.png?fileID=-250080322&amp;guid=e3876ae3494b5374caa353b0c7f10de5&amp;type=3#HUD_10&apos;);" />
-        </ui:VisualElement>
-    </ui:VisualElement>
+    <ui:VisualElement />
 </ui:UXML>

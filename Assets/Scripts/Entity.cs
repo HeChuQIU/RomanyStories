@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using Assets.Classes;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Assets.Scripts
 {

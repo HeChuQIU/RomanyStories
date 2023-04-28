@@ -43,7 +43,8 @@ namespace Assets.Scripts
                 }
             }
 
-            SetAnimation();
+            if (animator.enabled)
+                SetAnimation();
             moveVelocity.x = Input.GetAxis("Horizontal");
             moveVelocity.y = Input.GetAxis("Vertical");
             moveVelocity = EntityData.Speed * moveVelocity;
