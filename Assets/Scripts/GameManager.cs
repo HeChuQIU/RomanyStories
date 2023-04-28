@@ -1,5 +1,10 @@
+using System;
 using System.Collections.Generic;
+using Assets.Classes;
+using Assets.Scripts.UI;
 using UnityEngine;
+using UnityEngine.Serialization;
+using UnityEngine.UIElements;
 
 namespace Assets.Scripts
 {
@@ -13,6 +18,9 @@ namespace Assets.Scripts
         [SerializeField] private float maxCameraDistance;
         [SerializeField] private bool isMoveCameraWithoutMouse;
         [SerializeField] private Mob mobPrefab;
+        [SerializeField] private UIDocument hudUI;
+
+        private VisualElement HudRoot => hudUI.rootVisualElement;
 
         public static GameManager Instance { get; private set; }
 
@@ -39,6 +47,11 @@ namespace Assets.Scripts
             itemSystem = Scripts.ItemSystem.Instance;
             if (mainCamera == null)
                 mainCamera = Camera.main;
+        }
+
+        private void Start()
+        {
+            HudRoot.Add(new Hud(player.EntityData));
         }
 
         private void Update()
