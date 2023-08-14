@@ -13,9 +13,11 @@ namespace Assets.Classes
         int MaxStrength { get; set; }
         int Strength { get; set; }
         int MaxArmor { get; set; }
+        int CurrentArmor { get; set; }
         int CurrentExtraHealth { get; set; }
         float Speed { get; set; }
         float Damage { get; set; }
+        bool Dying { get; set; }
         EntityCamp Camp { get; set; }
         string this[string propertyName] { get; set; }
     }
@@ -28,9 +30,9 @@ namespace Assets.Classes
             get => maxHitPoint;
             set
             {
+                maxHitPoint = value;
                 OnEntityDataChanged?.Invoke(this,
                     new EntityDataChangedEventArgs(nameof(MaxHitPoint), maxHitPoint, value));
-                maxHitPoint = value;
             }
         }
 
@@ -39,9 +41,9 @@ namespace Assets.Classes
             get => currentHitPoint;
             set
             {
+                currentHitPoint = value;
                 OnEntityDataChanged?.Invoke(this,
                     new EntityDataChangedEventArgs(nameof(CurrentHitPoint), currentHitPoint, value));
-                currentHitPoint = value;
             }
         }
 
@@ -50,9 +52,9 @@ namespace Assets.Classes
             get => maxStrength;
             set
             {
+                maxStrength = value;
                 OnEntityDataChanged?.Invoke(this,
                     new EntityDataChangedEventArgs(nameof(MaxStrength), maxStrength, value));
-                maxStrength = value;
             }
         }
 
@@ -61,9 +63,9 @@ namespace Assets.Classes
             get => strength;
             set
             {
+                strength = value;
                 OnEntityDataChanged?.Invoke(this,
                     new EntityDataChangedEventArgs(nameof(Strength), strength, value));
-                strength = value;
             }
         }
 
@@ -72,9 +74,20 @@ namespace Assets.Classes
             get => maxArmor;
             set
             {
+                maxArmor = value;
                 OnEntityDataChanged?.Invoke(this,
                     new EntityDataChangedEventArgs(nameof(MaxArmor), maxArmor, value));
-                maxArmor = value;
+            }
+        }
+
+        public int CurrentArmor
+        {
+            get => currentArmor;
+            set
+            {
+                currentArmor = value;
+                OnEntityDataChanged?.Invoke(this,
+                    new EntityDataChangedEventArgs(nameof(CurrentArmor), CurrentArmor, value));
             }
         }
 
@@ -83,9 +96,9 @@ namespace Assets.Classes
             get => currentExtraHealth;
             set
             {
+                currentExtraHealth = value;
                 OnEntityDataChanged?.Invoke(this,
                     new EntityDataChangedEventArgs(nameof(CurrentExtraHealth), currentExtraHealth, value));
-                currentExtraHealth = value;
             }
         }
 
@@ -94,9 +107,9 @@ namespace Assets.Classes
             get => speed;
             set
             {
+                speed = value;
                 OnEntityDataChanged?.Invoke(this,
                     new EntityDataChangedEventArgs(nameof(Speed), speed, value));
-                speed = value;
             }
         }
 
@@ -105,10 +118,16 @@ namespace Assets.Classes
             get => damage;
             set
             {
+                damage = value;
                 OnEntityDataChanged?.Invoke(this,
                     new EntityDataChangedEventArgs(nameof(Damage), damage, value));
-                damage = value;
             }
+        }
+
+        public bool Dying
+        {
+            get => dying;
+            set => dying = value;
         }
 
         public EntityCamp Camp
@@ -116,9 +135,9 @@ namespace Assets.Classes
             get => camp;
             set
             {
+                camp = value;
                 OnEntityDataChanged?.Invoke(this,
                     new EntityDataChangedEventArgs(nameof(Camp), camp, value));
-                camp = value;
             }
         }
 
@@ -127,9 +146,9 @@ namespace Assets.Classes
             get => idleTime;
             set
             {
+                idleTime = value;
                 OnEntityDataChanged?.Invoke(this,
                     new EntityDataChangedEventArgs(nameof(IdleTime), idleTime, value));
-                idleTime = value;
             }
         }
 
@@ -140,8 +159,11 @@ namespace Assets.Classes
         [SerializeField] private int maxStrength;
         [SerializeField] private int strength;
         [SerializeField] private int maxArmor;
+        [SerializeField] private int currentArmor;
         [SerializeField] private int currentExtraHealth;
         [SerializeField] private float speed;
+        [SerializeField] private bool dying;
+
 
         [FormerlySerializedAs("attackDamage")] [SerializeField]
         private float damage;
@@ -165,7 +187,8 @@ namespace Assets.Classes
 
     public class EntityDataChangedEventArgs : EventArgs
     {
-        private static readonly Dictionary<string,Type> PropertyTypes = new();
+        private static readonly Dictionary<string, Type> PropertyTypes = new();
+
         public EntityDataChangedEventArgs(string propertyName, object oldValue, object newValue)
         {
             PropertyName = propertyName;

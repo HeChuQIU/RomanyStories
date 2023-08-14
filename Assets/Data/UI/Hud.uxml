@@ -1,3 +1,33 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/Data/UI/Hud.uss?fileID=7433441132597879392&amp;guid=6fb72e16b9084f4448acbf7671956e49&amp;type=3#Hud" />
     <ui:VisualElement />
+    <ui:VisualElement name="OnPlay" style="width: 100%; height: 100%;">
+        <ui:VisualElement name="LeftBottom" class="left-bottom">
+            <ui:VisualElement name="ArmorBar" class="stateBar armorBar">
+                <ui:VisualElement class="armorFlame flame">
+                    <ui:VisualElement />
+                </ui:VisualElement>
+                <ui:VisualElement />
+                <ui:VisualElement />
+            </ui:VisualElement>
+            <ui:VisualElement name="HitPointBar" class="hitPointBar stateBar">
+                <ui:VisualElement class="flame heartFlame">
+                    <ui:VisualElement class="heart" />
+                </ui:VisualElement>
+                <ui:VisualElement class="flame heartFlame">
+                    <ui:VisualElement class="heart" />
+                </ui:VisualElement>
+                <ui:VisualElement />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+    <ui:VisualElement name="OnDialog" style="position: absolute; width: 100%; height: 100%; display: none;">
+        <ui:VisualElement name="Dialog" class="dialog" style="background-image: url(&apos;project://database/Assets/Arts/UI/%E8%AD%A6%E5%91%8A%E6%A1%86.png?fileID=931753455&amp;guid=a46b0648068cd744a9737235a83ef63b&amp;type=3#警告框_0&apos;); padding-left: 20px; padding-right: 20px; padding-top: 20px; padding-bottom: 20px; width: 75%; height: 25%;">
+            <ui:Label display-tooltip-when-elided="true" name="DialogText" text="            currentDialogTextIndex++;" style="left: 50%; translate: -50% 0; top: 8px; -unity-font: resource(&apos;Font &amp; Materials/Alibaba-PuHuiTi-B&apos;); -unity-font-definition: resource(&apos;Font &amp; Materials/Alibaba-PuHuiTi-B SDF&apos;); font-size: 24px; white-space: normal; width: 75%;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="Person" style="position: absolute; width: 100%; height: 100%;">
+            <ui:VisualElement name="Isis" style="position: absolute; background-image: url(&apos;project://database/Assets/Arts/%E7%AB%8B%E7%BB%98/PS-%E5%B0%8F%E9%AD%94%E5%A5%B3.png?fileID=2800000&amp;guid=038034f8e8b9dd249a6d79df42ef703f&amp;type=3#PS-小魔女&apos;); width: 358px; height: 910px; -unity-background-scale-mode: scale-and-crop; right: 1%; bottom: -15%;" />
+            <ui:VisualElement name="Wise" style="position: absolute; background-image: url(&apos;project://database/Assets/Arts/%E7%AB%8B%E7%BB%98/PS-%E6%80%80%E6%96%AF.png?fileID=2800000&amp;guid=e39087ecad1c42c4881b9794537c5f1f&amp;type=3#PS-怀斯&apos;); width: 358px; height: 910px; -unity-background-scale-mode: scale-and-crop; bottom: -15%; left: 1%;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
 </ui:UXML>

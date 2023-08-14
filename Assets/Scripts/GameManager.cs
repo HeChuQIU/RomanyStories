@@ -1,10 +1,13 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Assets.Classes;
+using Assets.Mobs;
 using Assets.Scripts.UI;
 using UnityEngine;
-using UnityEngine.Serialization;
+using UnityEngine.U2D;
 using UnityEngine.UIElements;
+using UnityEngine.Video;
 
 namespace Assets.Scripts
 {
@@ -18,11 +21,26 @@ namespace Assets.Scripts
         [SerializeField] private float maxCameraDistance;
         [SerializeField] private bool isMoveCameraWithoutMouse;
         [SerializeField] private Mob mobPrefab;
-        [SerializeField] private UIDocument hudUI;
+        [SerializeField] private Hud hud;
+        [SerializeField] private StyleSheet hudStyleSheet;
+        [SerializeField] private Sprite flameSprite;
+        [SerializeField] private Sprite heartSprite;
+        [SerializeField] private DialogData dialogData;
+        [SerializeField] private DialogTrigger bossDialogTrigger;
+        [SerializeField] private bool lockCamera;
+        [SerializeField] private Vector3 lockCameraPosition;
+        [SerializeField] private Wise wise;
+        [SerializeField] private BoxCollider2D bossRoomCollider;
+        [SerializeField] private AudioSource audioSource;
+        [SerializeField] private AudioClip bossStartMusic;
+        [SerializeField] private AudioClip bossLoopMusic;
+        [SerializeField] private VideoPlayer videoPlayer;
+        [SerializeField] private VideoClip videoClip;
 
-        private VisualElement HudRoot => hudUI.rootVisualElement;
 
         public static GameManager Instance { get; private set; }
+
+        public Hud Hud => hud;
 
         public Vector2 GetMousePosition()
         {
@@ -47,19 +65,42 @@ namespace Assets.Scripts
             itemSystem = Scripts.ItemSystem.Instance;
             if (mainCamera == null)
                 mainCamera = Camera.main;
+            // videoPlayer.time = videoClip.length;
+            videoPlayer.loopPointReached += (source =>
+            {
+                hud.gameObject.SetActive(true);
+                Destroy(videoPlayer.gameObject);
+                Hud.OpenDialog(DialogData.Create(new List<(string speakingRole, string text)>()
+                    { ("", "使用方向键以移动，Z键攻击") }));
+                if (bossDialogTrigger != null)
+                    bossDialogTrigger.OnTriggered += () =>
+                    {
+                        mainCamera.orthographicSize = 4.4f;
+                        lockCamera = true;
+                        wise.state = Wise.State.Spell1;
+                        bossRoomCollider.enabled = true;
+                        audioSource.clip = bossStartMusic;
+                        audioSource.Play();
+                        audioSource.loop = false;
+                        StartCoroutine(ChangeClip());
+                    };
+
+                IEnumerator ChangeClip()
+                {
+                    yield return new WaitForSeconds(bossStartMusic.length);
+                    audioSource.clip = bossLoopMusic;
+                    audioSource.loop = true;
+                    audioSource.Play();
+                }
+            });
         }
 
         private void Start()
         {
-            HudRoot.Add(new Hud(player.EntityData));
         }
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.E))
-            {
-                Instantiate(mobPrefab, GetMousePosition(), Quaternion.identity);
-            }
         }
 
         private void LateUpdate()
@@ -85,9 +126,28 @@ namespace Assets.Scripts
 
             void MoveCameraWithoutMouse()
             {
+                if (lockCamera)
+                {
+                    mainCamera.transform.position = lockCameraPosition;
+                    return;
+                }
+
                 var position = player.transform.position;
                 position.z = mainCamera.transform.position.z;
                 mainCamera.transform.position = position;
+            }
+        }
+
+        public void GameOver()
+        {
+            StartCoroutine(Enu());
+
+            IEnumerator Enu()
+            {
+                yield return new WaitForSeconds(1.0f);
+                Hud.OpenDialog(DialogData.Create(new List<(string speakingRole, string text)>() { ("", "你已完成游戏内容") }));
+                yield return null;
+                UnityEngine.SceneManagement.SceneManager.LoadScene("Main");
             }
         }
 

@@ -1,69 +1,146 @@
-using System.Threading.Tasks;
+using System;
+using System.Collections.Generic;
 using Assets.Classes;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.UIElements;
 using Logger = Assets.Classes.Logger;
 
 namespace Assets.Scripts.UI
 {
-    public class Hud : VisualElement
+    public class Hud : MonoBehaviour
     {
-        public new class UxmlFactory : UxmlFactory<Hud>
+        [SerializeField] private Player player;
+
+        private VisualElement root;
+        private VisualElement leftBottom;
+        private VisualElement hitPointBar;
+        private VisualElement armorBar;
+
+        [SerializeField] private DialogData dialogData;
+        [SerializeField] private int currentDialogTextIndex = 0;
+        [SerializeField] private bool isDialoging;
+
+        public bool IsDialoging
         {
+            get => isDialoging;
+            set => isDialoging = value;
         }
 
-        private EntityData entityData;
-        private HitPointBar hitPointBar;
-        private readonly VisualElement[] visualElements = new VisualElement[4];
-        private static StyleSheet _styleSheet;
-
-        private async Task Load()
+        public int CurrentDialogTextIndex
         {
-            if (_styleSheet == null)
+            get => currentDialogTextIndex;
+            set
             {
-                var handle = Addressables.LoadAssetAsync<StyleSheet>("Assets/Data/UI/Hud.uxml");
-                await handle.Task;
-                _styleSheet = handle.Result;
+                currentDialogTextIndex = value;
+                if (currentDialogTextIndex >= dialogData.DialogTexts.Count)
+                {
+                    Time.timeScale = 1;
+                    root.Q<VisualElement>("OnDialog").style.display = DisplayStyle.None;
+                    root.Q<VisualElement>("OnPlay").style.display = DisplayStyle.Flex;
+                    IsDialoging = false;
+                }
+                else
+                {
+                    root.Q<Label>("DialogText").text = dialogData.DialogTexts[currentDialogTextIndex].text;
+                    root.Q<VisualElement>("Person").Query<VisualElement>()
+                        .ForEach(element =>
+                        {
+                            element.style.display =
+                                element.name == dialogData.DialogTexts[currentDialogTextIndex].speakingRole
+                                || element.name == "Person"
+                                    ? DisplayStyle.Flex
+                                    : DisplayStyle.None;
+                        });
+                    // root.Q<VisualElement>("Person").Q<VisualElement>("Isis").style.display =
+                    //     dialogData.DialogTexts[currentDialogTextIndex].speakingRole == "Isis"
+                    //         ? DisplayStyle.Flex
+                    //         : DisplayStyle.None;
+                }
             }
-
-            styleSheets.Add(_styleSheet);
         }
 
-        public Hud()
+        private void Awake()
         {
-            var task = Load();
-            Logger.Log(_styleSheet);
+            root = GetComponent<UIDocument>().rootVisualElement;
+            if (root == null)
+                Logger.Log("root is null");
         }
 
-        public Hud(EntityData entityData) : this()
+        private void Start()
         {
-            this.entityData = entityData;
-            hitPointBar = new HitPointBar();
-            for (var i = 0; i < 4; i++)
+            leftBottom = root.Q<VisualElement>("LeftBottom");
+            if (leftBottom == null)
+                Logger.Log("leftBottom is null");
+            hitPointBar = leftBottom.Q<VisualElement>("HitPointBar");
+            if (hitPointBar == null)
+                Logger.Log("hitPointBar is null");
+            armorBar = leftBottom.Q<VisualElement>("ArmorBar");
+            if (armorBar == null)
+                Logger.Log("armorBar is null");
+            player.EntityData.OnEntityDataChanged += UpdateHud;
+
+            UpdateHitPointBar(player.EntityData);
+            UpdateArmorBar(player.EntityData);
+        }
+
+        private void Update()
+        {
+            if (Input.anyKeyDown && IsDialoging)
+                CurrentDialogTextIndex++;
+        }
+
+        private void UpdateHud(object sender, EntityDataChangedEventArgs e)
+        {
+            if (sender is not EntityData data)
+                return;
+            if (e.PropertyName is nameof(EntityData.MaxHitPoint) or nameof(EntityData.CurrentHitPoint))
+            {
+                UpdateHitPointBar(data);
+            }
+            else if (e.PropertyName is nameof(EntityData.MaxArmor) or nameof(EntityData.CurrentArmor))
+            {
+                UpdateArmorBar(data);
+            }
+        }
+
+        private void UpdateArmorBar(EntityData data)
+        {
+            armorBar.Clear();
+            for (int i = 0; i < data.MaxArmor; i++)
             {
                 var ve = new VisualElement();
-                switch (i)
+                if (i < data.CurrentArmor)
                 {
-                    case 0:
-                        ve.AddToClassList("left-top");
-                        break;
-                    case 1:
-                        ve.AddToClassList("right-top");
-                        break;
-                    case 2:
-                        ve.AddToClassList("left-bottom");
-                        break;
-                    case 3:
-                        ve.AddToClassList("right-bottom");
-                        break;
+                    ve.Add(new VisualElement());
                 }
 
-                Add(ve);
-                visualElements[i] = ve;
+                armorBar.Add(ve);
             }
-            visualElements[2].hierarchy.Add(new HitPointBar(entityData));
+        }
+
+        private void UpdateHitPointBar(EntityData data)
+        {
+            hitPointBar.Clear();
+            for (int i = 0; i < data.MaxHitPoint; i++)
+            {
+                var ve = new VisualElement();
+                if (i < data.CurrentHitPoint)
+                {
+                    ve.Add(new VisualElement());
+                }
+
+                hitPointBar.Add(ve);
+            }
+        }
+
+        public void OpenDialog(DialogData dialogData)
+        {
+            IsDialoging = true;
+            this.dialogData = dialogData;
+            Time.timeScale = 0;
+            root.Q<VisualElement>("OnDialog").style.display = DisplayStyle.Flex;
+            root.Q<VisualElement>("OnPlay").style.display = DisplayStyle.None;
+            CurrentDialogTextIndex = 0;
         }
     }
 }

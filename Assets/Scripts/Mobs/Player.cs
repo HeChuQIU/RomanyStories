@@ -1,16 +1,19 @@
 using System;
 using System.Collections;
 using System.Linq;
+using Assets.Scripts.Bullets;
 using UnityEngine;
+using Debug = System.Diagnostics.Debug;
 
 namespace Assets.Scripts
 {
     public class Player : Mob
     {
         [SerializeField] private new Rigidbody2D rigidbody;
-        [SerializeField] private BulletPlayer bulletPrefab;
+        [SerializeField] private BulletB bulletPrefab;
         [SerializeField] private Animator animator;
         [SerializeField] private float attackColdDown;
+        [SerializeField] private HitBox bulletClear;
 
         protected override void Awake()
         {
@@ -43,6 +46,9 @@ namespace Assets.Scripts
                 }
             }
 
+            if (Input.GetKeyDown(KeyCode.C))
+                StartCoroutine(ClearBullet());
+
             if (animator.enabled)
                 SetAnimation();
             moveVelocity.x = Input.GetAxis("Horizontal");
@@ -56,7 +62,7 @@ namespace Assets.Scripts
                     ? (from target in Targets
                         orderby (target.transform.position - transform.position).magnitude
                         select target.transform.position).First()
-                    : GameManager.Instance.GetMousePosition();
+                    : (Vector2)transform.position + moveVelocity + new Vector2(0f, 0.0001f);
                 bullet.targetPosition = targetPosition;
                 nextAttackTime = Time.time + attackColdDown;
             }
@@ -96,6 +102,30 @@ namespace Assets.Scripts
                     animator.Play(Vector2.Dot(moveVelocity, directions[1]) > 0 ? "Down" : "Left");
                 }
             }
+        }
+
+        protected override void Death()
+        {
+            StartCoroutine(ClearBullet());
+            EntityData.CurrentHitPoint = EntityData.MaxHitPoint;
+        }
+
+        private IEnumerator ClearBullet()
+        {
+            var bulletClearCollider =
+                Instantiate(this.bulletClear, transform.position, Quaternion.identity).Collider as CircleCollider2D;
+            if (bulletClearCollider == null)
+            {
+                yield break;
+            }
+
+            while (bulletClearCollider.radius < 10.0f)
+            {
+                bulletClearCollider.radius += 0.05f;
+                yield return null;
+            }
+
+            Destroy(bulletClearCollider.gameObject);
         }
     }
 }

@@ -11,7 +11,7 @@ TagManager:
   - 
   - Water
   - UI
-  - 
+  - MapFront
   - Mob
   - Bullet
   - Map
@@ -47,6 +47,12 @@ TagManager:
   - name: Mob
     uniqueID: 4098420197
     locked: 0
+  - name: MapFront
+    uniqueID: 3855658645
+    locked: 0
   - name: Bullet
     uniqueID: 2851422727
+    locked: 0
+  - name: Video
+    uniqueID: 4171647203
     locked: 0

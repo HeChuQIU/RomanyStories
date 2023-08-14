@@ -167,13 +167,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   entityData:
-    maxHitPoint: 100
-    currentHitPoint: 100
+    maxHitPoint: 5
+    currentHitPoint: 5
     maxStrength: 0
     strength: 0
     maxArmor: 0
+    currentArmor: 0
     currentExtraHealth: 0
     speed: 5
+    dying: 0
     damage: 0
     camp: 0
     idleTime: 0
@@ -181,11 +183,11 @@ MonoBehaviour:
   moveVelocity: {x: 0, y: 0}
   spriteRenderer: {fileID: 0}
   targets: []
-  spriteRenderer: {fileID: 0}
   rigidbody: {fileID: 0}
   bulletPrefab: {fileID: 7143902665865890160, guid: 2432422703357e94ea997aa10099c85b, type: 3}
   animator: {fileID: 0}
   attackColdDown: 0.1
+  bulletClear: {fileID: 798004610297980868, guid: 59afd80664a9afb41869f8eff01818fb, type: 3}
 --- !u!50 &7360506938047794648
 Rigidbody2D:
   serializedVersion: 4
@@ -322,7 +324,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.2, y: 0.2}
+  m_Size: {x: 0.05, y: 0.05}
   m_EdgeRadius: 0
 --- !u!114 &7360506938235312641
 MonoBehaviour:

@@ -32,9 +32,9 @@ namespace Assets.Scripts
                 hitBoxGameObject.transform.SetParent(transform);
             }
 
-            if (Rigidbody==null)
-                Rigidbody=GetComponent<Rigidbody2D>();
-            if (Rigidbody==null)
+            if (Rigidbody == null)
+                Rigidbody = GetComponent<Rigidbody2D>();
+            if (Rigidbody == null)
             {
                 gameObject.AddComponent<Rigidbody2D>();
             }

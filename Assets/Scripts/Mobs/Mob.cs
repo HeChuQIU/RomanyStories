@@ -45,7 +45,9 @@ namespace Assets.Scripts
 
         protected virtual void Death()
         {
-            Destroy(gameObject);
+            if (!EntityData.Dying)
+                Destroy(gameObject);
+            EntityData.Dying = true;
         }
 
         protected override void OnBeHit(HitBox hitBox, HitBox otherHitBox)
@@ -55,7 +57,7 @@ namespace Assets.Scripts
             var bullet = otherHitBox.Entity as Bullet;
             if (bullet != null && bullet.EntityData.Camp != EntityData.Camp)
             {
-                Logger.Log($"{otherHitBox.Entity.gameObject.name} hit {hitBox.Entity.gameObject.name}");
+                // Logger.Log($"{otherHitBox.Entity.gameObject.name} hit {hitBox.Entity.gameObject.name}");
                 TakeDamage(bullet.EntityData.Damage);
             }
         }

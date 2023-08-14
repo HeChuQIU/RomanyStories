@@ -1,13 +1,52 @@
-.left-top,
-.right-top,
-.left-bottom,
-.right-bottom {
-    width: 500px;
-    height: 500px;
+.body {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.5);
+    position: relative;
+}
+
+.left-top {
+    width: 320px;
+    height: 180px;
     position: absolute;
     background-color: rgba(255, 255, 255, 0.5);
-    border-color: black;
-    border-width: 2px;
+    top: auto;
+    left: auto;
+    bottom: auto;
+    right: auto;
+}
+
+.right-top {
+    width: 320px;
+    height: 180px;
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.5);
+    top: auto;
+    left: auto;
+    bottom: auto;
+    right: auto;
+}
+
+.left-bottom {
+    width: 320px;
+    height: 180px;
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.5);
+    top: auto;
+    left: auto;
+    bottom: auto;
+    right: auto;
+}
+
+.right-bottom {
+    width: 320px;
+    height: 180px;
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.5);
+    top: auto;
+    left: auto;
+    bottom: auto;
+    right: auto;
 }
 
 .left-top {
@@ -28,4 +67,53 @@
 .right-bottom {
     bottom: 0;
     right: 0;
+}
+
+.stateBar {
+    background-color: rgba(97, 210, 212, 0);
+    flex: auto;
+    flex-direction: row;
+    flex-shrink: 0;
+    flex-grow: 0;
+    margin-left: 32px;
+    margin-top: 8px;
+}
+
+.stateBar > * {
+    height: 32px;
+    width: 32px;
+    align-items: center;
+    justify-content: center;
+    margin-left: 2px;
+}
+
+.stateBar > * > * {
+    width: 32px;
+    height: 32px;
+}
+
+.hitPointBar > * {
+    background-image: url('project://database/Assets/Arts/UI/HUD.png?fileID=-83560831&guid=e3876ae3494b5374caa353b0c7f10de5&type=3#HUD_7');
+}
+
+.armorBar > * {
+    background-image: url('project://database/Assets/Arts/UI/HUD.png?fileID=-518949474&guid=e3876ae3494b5374caa353b0c7f10de5&type=3#HUD_3');
+}
+
+.hitPointBar > * > * {
+    background-image: url('project://database/Assets/Arts/UI/HUD.png?fileID=-94831980&guid=e3876ae3494b5374caa353b0c7f10de5&type=3#HUD_9');
+}
+
+.armorBar > * > * {
+    background-image: url('project://database/Assets/Arts/UI/HUD.png?fileID=676560695&guid=e3876ae3494b5374caa353b0c7f10de5&type=3#HUD_6');
+}
+
+.dialog {
+    background-color: rgba(68, 183, 176, 0.6);
+    position: absolute;
+    width: 1000px;
+    height: 200px;
+    left: 50%;
+    translate: -50% 0;
+    bottom: 60px;
 }
